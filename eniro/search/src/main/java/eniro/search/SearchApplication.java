@@ -1,5 +1,6 @@
 package eniro.search;
 
+import eniro.search.resource.SearchResource;
 import io.dropwizard.Application;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
@@ -16,8 +17,10 @@ public class SearchApplication extends Application<SearchConfiguration> {
     }
 
     @Override
-    public void run(SearchConfiguration configuration, Environment environment) {
-        // nothing to do yet
+    public void run(SearchConfiguration configuration,
+                    Environment environment) {
+        final SearchResource resource = new SearchResource();
+        environment.jersey().register(resource);
     }
 
 }
