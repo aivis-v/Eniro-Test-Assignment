@@ -1,0 +1,2 @@
+INDEX VERSION 1.127+C:\Users\ShadoX\workspace\eniro\.metadata\.plugins\org.eclipse.jdt.core
+2083202745.index
