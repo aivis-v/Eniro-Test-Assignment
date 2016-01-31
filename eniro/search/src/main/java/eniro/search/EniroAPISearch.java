@@ -1,25 +1,34 @@
 package eniro.search;
 
 import java.io.BufferedReader;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Properties;
+import java.util.concurrent.Callable;
 
-public class EniroAPI {
+import org.json.JSONObject;
 
+import eniro.search.api.EniroUtil;
+import eniro.search.api.SearchResults;
+
+public class EniroAPISearch implements Callable<SearchResults> {
+
+	private final String phrase;
 	private static String apiUrl;
 	private static final String USER_AGENT = "Mozilla/5.0";
 	
-	static {
+	public EniroAPISearch(String phrase) {
+		this.phrase = phrase;
+		
 		Properties prop = new Properties();
 		InputStream input = null;
-
+		
 		try {
-			input = new FileInputStream("config.properties");
+			ClassLoader loader = Thread.currentThread().getContextClassLoader();
+			input = loader.getResourceAsStream("config.properties");
 			prop.load(input);
 			apiUrl = prop.getProperty("url");
 		} catch (IOException ex) {
@@ -34,27 +43,14 @@ public class EniroAPI {
 			}
 		}
 	}
-	 
-	public static String search(String phrase) {
-		String result = "";
-		//Get results from API
-       try {
-    	   result = getApiResults(phrase);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-       //Filter results.. get address, phoneNumbers, companyInfo
-       //return SearchResult object 
-       return result;
-    }
 	
-	private static String getApiResults(String phrase) throws IOException {
+	private JSONObject getApiResults(String phrase) throws IOException {
 		 URL obj = new URL(apiUrl+phrase);
 	        HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 	        con.setRequestMethod("GET");
 	        con.setRequestProperty("User-Agent", USER_AGENT);
 	                
-	        String rez = "";
+	        JSONObject jsonObj = null;
 	        
 	        if (con.getResponseCode() == HttpURLConnection.HTTP_OK) {
 	            BufferedReader in = new BufferedReader(new InputStreamReader(
@@ -66,8 +62,22 @@ public class EniroAPI {
 	                response.append(inputLine);
 	            }
 	            in.close();
-	            rez = response.toString();
+	            jsonObj = new JSONObject(response.toString());
 	        }
-	        return rez;
+	        return jsonObj;
+	}
+	
+	
+
+	public SearchResults call() throws Exception{
+		JSONObject jsonResults = null;
+		SearchResults results = null;
+       try {
+    	   jsonResults = getApiResults(phrase);
+    	   results = new SearchResults(EniroUtil.extractData(jsonResults));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+       return results;
 	}
 }

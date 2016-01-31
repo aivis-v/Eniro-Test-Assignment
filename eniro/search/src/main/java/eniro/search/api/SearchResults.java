@@ -13,9 +13,15 @@ public class SearchResults {
 	public SearchResults(List<SearchResult> results) {
 		this.results = results;
 	}
-    
+
+	@JsonProperty
+	public int getResultCount() {
+		return results.size();
+	}
+	
 	@JsonProperty
 	public List<SearchResult> getResults() {
 		return results;
 	}
+	
 }

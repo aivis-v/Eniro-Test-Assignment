@@ -16,8 +16,18 @@
           <artifactId>dropwizard-core</artifactId>
           <version>${dropwizard.version}</version>
       </dependency>
+      <dependency>
+		  <groupId>org.json</groupId>
+	      <artifactId>json</artifactId>
+	      <version>20151123</version>
+	  </dependency>
   </dependencies>
   <build>
+      <resources>
+      	<resource>
+        	<directory>src/main/resources</directory>
+        </resource>
+      </resources>
 	  <plugins>
 	  <plugin>
 	    <groupId>org.apache.maven.plugins</groupId>

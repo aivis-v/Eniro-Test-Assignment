@@ -7,6 +7,11 @@
   <version>0.0.1-SNAPSHOT</version>
   <description>Web application to perform multiple searches against the Eniro API</description>
   <build>
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+      </resource>
+    </resources>
     <plugins>
       <plugin>
         <artifactId>maven-shade-plugin</artifactId>
