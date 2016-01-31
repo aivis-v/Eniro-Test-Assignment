@@ -1,4 +1,4 @@
-package eniro.search.api;
+package eniro.search.resource.searchResultDetails;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

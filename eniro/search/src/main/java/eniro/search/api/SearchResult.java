@@ -4,6 +4,10 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import eniro.search.resource.searchResultDetails.Address;
+import eniro.search.resource.searchResultDetails.CompanyInfo;
+import eniro.search.resource.searchResultDetails.PhoneNumber;
+
 public class SearchResult {
 	
 	private Address address;

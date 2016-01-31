@@ -11,7 +11,7 @@ import java.util.concurrent.Callable;
 
 import org.json.JSONObject;
 
-import eniro.search.api.EniroUtil;
+import eniro.search.resource.utils.EniroUtil;
 import eniro.search.api.SearchResults;
 
 public class EniroAPISearch implements Callable<SearchResults> {
@@ -54,7 +54,7 @@ public class EniroAPISearch implements Callable<SearchResults> {
 	        
 	        if (con.getResponseCode() == HttpURLConnection.HTTP_OK) {
 	            BufferedReader in = new BufferedReader(new InputStreamReader(
-	                    con.getInputStream()));
+	                    con.getInputStream(),  "UTF-8"));
 	            String inputLine;
 	            StringBuffer response = new StringBuffer();
 	 

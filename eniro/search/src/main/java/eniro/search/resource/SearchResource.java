@@ -13,7 +13,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import eniro.search.EniroAPISearch;
-import eniro.search.api.SearchResult;
 import eniro.search.api.SearchResults;
 
 @Path("/enirotest/search")

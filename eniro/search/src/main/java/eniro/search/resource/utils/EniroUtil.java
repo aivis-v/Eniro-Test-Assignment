@@ -1,10 +1,15 @@
-package eniro.search.api;
+package eniro.search.resource.utils;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import eniro.search.api.SearchResult;
+import eniro.search.resource.searchResultDetails.Address;
+import eniro.search.resource.searchResultDetails.CompanyInfo;
+import eniro.search.resource.searchResultDetails.PhoneNumber;
 
 public class EniroUtil {
 	
