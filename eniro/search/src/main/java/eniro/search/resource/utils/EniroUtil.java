@@ -10,20 +10,20 @@ public class EniroUtil {
 
 	public static List<JSONObject> extractFilteredData(JSONObject obj, List<String> filters) {
 		List<JSONObject> results = new ArrayList<JSONObject>();
-		JSONArray array = obj.getJSONArray("adverts");
+		JSONArray jsonResults = obj.getJSONArray("adverts");
 		
-		for(Object jobj : array) {
-			JSONObject jSon = (JSONObject) jobj;
+		for(Object jsonObject : jsonResults) {
+			JSONObject jsonResult = (JSONObject) jsonObject;
 			
-			JSONObject jsonResult = new JSONObject();
+			JSONObject result = new JSONObject();
 			
 			for(String filter : filters) {
-				if(jSon.has(filter)){
-					jsonResult.accumulate(filter, jSon.get(filter));
+				if(jsonResult.has(filter)){
+					result.accumulate(filter, jsonResult.get(filter));
 				}
 			}
 			
-			results.add(jsonResult);
+			results.add(result);
 		}
 		
 		return results;
