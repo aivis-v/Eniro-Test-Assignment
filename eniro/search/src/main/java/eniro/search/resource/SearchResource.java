@@ -13,6 +13,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import eniro.search.EniroAPISearch;
+import eniro.search.api.SearchCriteria;
 import eniro.search.api.SearchResults;
 
 @Path("/enirotest/search")
@@ -30,12 +31,12 @@ public class SearchResource {
     private static final ExecutorService threadpool = Executors.newCachedThreadPool();
         
     @POST
-	public List<SearchResults> searchPhrases(List<String> phrases) {
+	public List<SearchResults> searchPhrases(SearchCriteria criteria) {
 		List<SearchResults> results = new ArrayList<SearchResults>();
 		
 		List<Future> searches = new ArrayList<Future>();
-		for(String phrase : phrases) {
-			searches.add(threadpool.submit(new EniroAPISearch(phrase)));
+		for(String phrase : criteria.getPhrases()) {
+			searches.add(threadpool.submit(new EniroAPISearch(phrase, criteria.getFilters())));
 		}
 		
 		int searchesDone = 0;

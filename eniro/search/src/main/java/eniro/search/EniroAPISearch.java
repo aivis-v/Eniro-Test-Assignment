@@ -6,22 +6,25 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.Callable;
 
 import org.json.JSONObject;
 
-import eniro.search.resource.utils.EniroUtil;
 import eniro.search.api.SearchResults;
+import eniro.search.resource.utils.EniroUtil;
 
 public class EniroAPISearch implements Callable<SearchResults> {
 
 	private final String phrase;
 	private static String apiUrl;
 	private static final String USER_AGENT = "Mozilla/5.0";
+	private static List<String> filters;
 	
-	public EniroAPISearch(String phrase) {
+	public EniroAPISearch(String phrase, List<String> filters) {
 		this.phrase = phrase;
+		this.filters = filters;
 		
 		Properties prop = new Properties();
 		InputStream input = null;
@@ -66,18 +69,16 @@ public class EniroAPISearch implements Callable<SearchResults> {
 	        }
 	        return jsonObj;
 	}
-	
-	
 
-	public SearchResults call() throws Exception{
+	public SearchResults call() throws Exception {
 		JSONObject jsonResults = null;
 		SearchResults results = null;
        try {
     	   jsonResults = getApiResults(phrase);
-    	   results = new SearchResults(EniroUtil.extractData(jsonResults));
+    	   results = new SearchResults(EniroUtil.extractFilteredData(jsonResults, filters));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
        return results;
-	}
+	}	
 }

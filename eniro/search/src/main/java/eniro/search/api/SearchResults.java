@@ -2,15 +2,18 @@ package eniro.search.api;
 
 import java.util.List;
 
+import org.json.JSONObject;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonRawValue;
 
 public class SearchResults {
 
-	private List<SearchResult> results;
+	private List<JSONObject> results;
 	
 	public SearchResults() { }
 	
-	public SearchResults(List<SearchResult> results) {
+	public SearchResults(List<JSONObject> results) {
 		this.results = results;
 	}
 
@@ -19,8 +22,8 @@ public class SearchResults {
 		return results.size();
 	}
 	
-	@JsonProperty
-	public List<SearchResult> getResults() {
+	@JsonRawValue
+	public List<JSONObject> getResults() {
 		return results;
 	}
 	
