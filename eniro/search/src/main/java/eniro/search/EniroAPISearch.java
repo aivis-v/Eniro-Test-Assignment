@@ -12,10 +12,11 @@ import java.util.concurrent.Callable;
 
 import org.json.JSONObject;
 
+import eniro.search.api.SearchError;
 import eniro.search.api.SearchResults;
 import eniro.search.resource.utils.EniroUtil;
 
-public class EniroAPISearch implements Callable<SearchResults> {
+public class EniroAPISearch implements Callable<SearchResponse> {
 
 	private final String phrase;
 	private static String apiUrl;
@@ -25,7 +26,9 @@ public class EniroAPISearch implements Callable<SearchResults> {
 	public EniroAPISearch(String phrase, List<String> filters) {
 		this.phrase = phrase;
 		this.filters = filters;
-		
+	}
+	
+	static {
 		Properties prop = new Properties();
 		InputStream input = null;
 		
@@ -66,19 +69,37 @@ public class EniroAPISearch implements Callable<SearchResults> {
 	            }
 	            in.close();
 	            jsonObj = new JSONObject(response.toString());
-	        }
+	        } 
 	        return jsonObj;
 	}
 
-	public SearchResults call() throws Exception {
+	public SearchResponse call() throws Exception {
 		JSONObject jsonResults = null;
-		SearchResults results = null;
-       try {
-    	   jsonResults = getApiResults(phrase);
-    	   results = new SearchResults(EniroUtil.extractFilteredData(jsonResults, filters));
+		SearchResponse results = null;
+        try {
+    	    jsonResults = getApiResults(phrase);
+    	    if(jsonResults!=null) { 
+    	    	results = new SearchResults(EniroUtil.extractFilteredData(jsonResults, filters));
+    	    } else {
+    	    	results = new SearchError();
+    	    }
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
        return results;
 	}	
+	
+	public static boolean isWorking(){
+	    try {
+	      HttpURLConnection con =
+	         (HttpURLConnection) new URL(apiUrl).openConnection();
+	      con.setRequestMethod("HEAD");
+	      return (con.getResponseCode() == HttpURLConnection.HTTP_OK);
+	    }
+	    catch (Exception e) {
+	       e.printStackTrace();
+	       return false;
+	    }
+	  }  
+	
 }

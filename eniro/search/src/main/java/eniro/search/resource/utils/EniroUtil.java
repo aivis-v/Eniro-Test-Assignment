@@ -14,11 +14,10 @@ public class EniroUtil {
 		
 		for(Object jsonObject : jsonResults) {
 			JSONObject jsonResult = (JSONObject) jsonObject;
-			
 			JSONObject result = new JSONObject();
 			
 			for(String filter : filters) {
-				if(jsonResult.has(filter)){
+				if(jsonResult.has(filter)) {
 					result.accumulate(filter, jsonResult.get(filter));
 				}
 			}

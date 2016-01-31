@@ -13,7 +13,9 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import eniro.search.EniroAPISearch;
+import eniro.search.SearchResponse;
 import eniro.search.api.SearchCriteria;
+import eniro.search.api.SearchError;
 import eniro.search.api.SearchResults;
 
 @Path("/enirotest/search")
@@ -31,34 +33,41 @@ public class SearchResource {
     private static final ExecutorService threadpool = Executors.newCachedThreadPool();
         
     @POST
-	public List<SearchResults> searchPhrases(SearchCriteria criteria) {
-		List<SearchResults> results = new ArrayList<SearchResults>();
+	public SearchResponse searchPhrases(SearchCriteria criteria) {
+		SearchResponse result = null;
 		
-		List<Future> searches = new ArrayList<Future>();
-		for(String phrase : criteria.getPhrases()) {
-			searches.add(threadpool.submit(new EniroAPISearch(phrase, criteria.getFilters())));
-		}
-		
-		int searchesDone = 0;
-		while(searchesDone != searches.size()) {
-			searchesDone = 0;
-			for(Future search : searches) {
-				if(search.isDone()){
-					searchesDone += 1;
+		if(!EniroAPISearch.isWorking()) {
+			result = new SearchError();
+		} else {
+			SearchResults results = new SearchResults();
+			List<Future> searches = new ArrayList<Future>();
+			
+			for(String phrase : criteria.getPhrases()) {
+				searches.add(threadpool.submit(new EniroAPISearch(phrase, criteria.getFilters())));
+			}
+			
+			int searchesDone = 0;
+			while(searchesDone != searches.size()) {
+				searchesDone = 0;
+				for(Future search : searches) {
+					if(search.isDone()){
+						searchesDone += 1;
+					}
 				}
 			}
-		}
-		
-		for(Future<SearchResults> search : searches) {
-			try {
-				results.add(search.get());
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			} catch (ExecutionException e) {
-				e.printStackTrace();
+			
+			for(Future<SearchResults> search : searches) {
+				try {
+					results.add(search.get().getResults());
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				} catch (ExecutionException e) {
+					e.printStackTrace();
+				}
 			}
+			result = results;
 		}
-		return results;
+		return result;
 	}
  
 }
