@@ -10,7 +10,7 @@ public class EniroUtil {
 
 	public static List<JSONObject> extractFilteredData(JSONObject obj, List<String> filters) {
 		List<JSONObject> results = new ArrayList<JSONObject>();
-		JSONArray jsonResults = obj.getJSONArray("adverts");
+		JSONArray jsonResults = obj.getJSONArray("adverts");//could move to a properties file
 		
 		for(Object jsonObject : jsonResults) {
 			JSONObject jsonResult = (JSONObject) jsonObject;
