@@ -14,17 +14,33 @@ public class EniroUtil {
 		
 		for(Object jsonObject : jsonResults) {
 			JSONObject jsonResult = (JSONObject) jsonObject;
-			JSONObject result = new JSONObject();
-			
-			for(String filter : filters) {
-				if(jsonResult.has(filter)) {
-					result.accumulate(filter, jsonResult.get(filter));
-				}
+		
+			if(filters.isEmpty()){
+				results.add(jsonResult);
 			}
 			
-			results.add(result);
+			if(containsAnyKey(jsonResult, filters)) {
+				JSONObject result = new JSONObject();
+				
+				for(String filter : filters) {
+					if(jsonResult.has(filter)) {
+						result.accumulate(filter, jsonResult.get(filter));
+					}
+				}
+				
+				results.add(result);
+			}
 		}
 		
 		return results;
 	}	
+	
+	private static boolean containsAnyKey(JSONObject obj, List<String> keys) {
+		for(String key : keys) {
+			if(obj.has(key)) {
+				return true;
+			}
+		}
+		return false;
+	}
 }
