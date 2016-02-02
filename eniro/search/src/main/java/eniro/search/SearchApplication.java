@@ -3,6 +3,7 @@ package eniro.search;
 import eniro.search.healthchecks.EniroAPIHealthCheck;
 import eniro.search.resource.SearchResource;
 import io.dropwizard.Application;
+import io.dropwizard.assets.AssetsBundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 
@@ -14,7 +15,7 @@ public class SearchApplication extends Application<SearchConfiguration> {
 
     @Override
     public void initialize(Bootstrap<SearchConfiguration> bootstrap) {
-        // nothing to do yet
+    	bootstrap.addBundle(new AssetsBundle("/assets", "/enirotest", "index.html"));
     }
 
     @Override
@@ -25,6 +26,8 @@ public class SearchApplication extends Application<SearchConfiguration> {
         environment.jersey().register(resource);
         
         environment.healthChecks().register("Eniro API", new EniroAPIHealthCheck());
+        
+        environment.jersey().setUrlPattern("/api/*");
     }
 
 }
