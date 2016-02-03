@@ -38,8 +38,8 @@ function getResultsAsHTML(json) {
 	
 	var html = '<br>';
 	
-	if(json == null || typeof json === 'undefined') {
-		return '';
+	if(json === null || typeof json === 'undefined') {
+		return html;
 	}
 	
 	for (let key of Object.keys(json)) {
@@ -49,6 +49,8 @@ function getResultsAsHTML(json) {
 			for (let element of json[key]) {
 				html += getResultsAsHTML(element); 
 			}
+		} else if(typeof json[key] === 'object'){
+			html += getResultsAsHTML(json[key]);
 		} else {
 			html += json[key] + '<br>';
 		}
