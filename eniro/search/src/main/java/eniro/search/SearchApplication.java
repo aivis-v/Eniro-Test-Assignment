@@ -15,6 +15,7 @@ public class SearchApplication extends Application<SearchConfiguration> {
 
     @Override
     public void initialize(Bootstrap<SearchConfiguration> bootstrap) {
+    	bootstrap.addBundle(new AssetsBundle("/assets/js", "/js", null, "js"));
     	bootstrap.addBundle(new AssetsBundle("/assets", "/enirotest", "index.html"));
     }
 
@@ -23,11 +24,10 @@ public class SearchApplication extends Application<SearchConfiguration> {
                     Environment environment) {
     	
     	final SearchResource resource = new SearchResource();
-        environment.jersey().register(resource);
-        
+    	environment.jersey().register(resource);
+    	
         environment.healthChecks().register("Eniro API", new EniroAPIHealthCheck());
-        
-        environment.jersey().setUrlPattern("/api/*");
+    	environment.jersey().setUrlPattern("/api/*");        
     }
 
 }

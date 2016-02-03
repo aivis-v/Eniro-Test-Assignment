@@ -18,7 +18,7 @@ import eniro.search.api.SearchCriteria;
 import eniro.search.api.SearchError;
 import eniro.search.api.SearchResults;
 
-@Path("/enirotest/search")
+@Path("/search")
 @Produces(MediaType.APPLICATION_JSON)
 public class SearchResource {
 

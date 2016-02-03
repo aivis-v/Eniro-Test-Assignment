@@ -11,15 +11,15 @@ public class EniroUtil {
 	public static List<JSONObject> extractFilteredData(JSONObject obj, List<String> filters) {
 		List<JSONObject> results = new ArrayList<JSONObject>();
 		JSONArray jsonResults = obj.getJSONArray("adverts");//could move to a properties file
-		
+
 		for(Object jsonObject : jsonResults) {
 			JSONObject jsonResult = (JSONObject) jsonObject;
 		
-			if(filters.isEmpty()){
+			if(filters.isEmpty() || !containsValuableData(filters)){
 				results.add(jsonResult);
 			}
 			
-			if(containsAnyKey(jsonResult, filters)) {
+			if(containsAnyKey(jsonResult, filters) && containsValuableData(filters)) {
 				JSONObject result = new JSONObject();
 				
 				for(String filter : filters) {
@@ -34,6 +34,15 @@ public class EniroUtil {
 		
 		return results;
 	}	
+
+	private static boolean containsValuableData(List<String> filters) {
+		for(String filter : filters){
+			if(!filter.trim().isEmpty()) {
+				return true;
+			}
+		}
+		return false;
+	}
 	
 	private static boolean containsAnyKey(JSONObject obj, List<String> keys) {
 		for(String key : keys) {

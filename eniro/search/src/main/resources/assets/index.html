@@ -1,10 +1,26 @@
 <!DOCTYPE html>
 <html>
 <head>
+<script src="js/jquery-1.12.0.min.js"></script>
+<script src="js/formHandler.js"></script>
 <meta charset="ISO-8859-1">
 <title>Eniro test</title>
 </head>
 <body>
+
+<!-- <form name="search" onsubmit="return postData()" > -->
+ <form method="post" name="search">
+ 
+
+	<p><label for="phrases">Phrases:</label>
+	<input type="text" name="phrases" id="phrases"></p>
+
+	<p><label for="filters">Filters:</label>
+	<input type="text" name="filters" id="filters"></p>
+    
+    <!-- <input type="submit" name="Submit" value="Search"/> -->
+    <input type="submit" value="Submit" class="submit"/>
+</form>
 
 </body>
 </html>
