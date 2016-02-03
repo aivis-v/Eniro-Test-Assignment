@@ -1,6 +1,3 @@
-/**
- * 
- */
 
 function getJSON() {
 	var phrases = document.getElementsByName("phrases")[0].value.split(","); 
@@ -8,49 +5,62 @@ function getJSON() {
 
 	var json = '{ "phrases" : ' + JSON.stringify(phrases) + ',' +
 	'"filters" :  ' + JSON.stringify(filters) + ' }';
-	alert(json);
+	
 	return json;
 }
 
-
-
 $(function () {
-
     $('form').on('submit', function (e) {
-
       e.preventDefault();
+      clearResults();
+      
       $.ajax({
   	    type: 'POST',
   	    url: '/search',
   	    data: getJSON(), 
   	    success: function(data) { 
-//  	    	alert('data: ' + ); 
-  	    	console.log(JSON.stringify(data));
+  	    	displayResults(data);
     	},
   	    contentType: "application/json",
   	    dataType: 'json'
   	});
     });
 });
-//function postData() {
-//	$.ajax({
-//	    type: 'POST',
-//	    url: '/search',
-//	    data: getJSON, 
-//	    success: function(data) { alert('data: ' + data); },
-//	    contentType: "application/json",
-//	    dataType: 'json'
-//	});
-//}
-//
-//$(function() {
-//	$(".submit").click(function() {
-//		alert("submit it!");
-//		postData();
-//	});
-//	return false;
-//});
 
-function handleResponse() {
+function clearResults() {
+	if(document.getElementById('results') != null) {
+		document.getElementById('results').remove();
+	}
+}
+
+function getResultsAsHTML(json) {
+	"use strict";
 	
+	var html = '<br>';
+	
+	if(json == null || typeof json === 'undefined') {
+		return '';
+	}
+	
+	for (let key of Object.keys(json)) {
+		html += '<b>'+ key +':</b> ';
+		
+		if(Array.isArray(json[key])) {
+			for (let element of json[key]) {
+				html += getResultsAsHTML(element); 
+			}
+		} else {
+			html += json[key] + '<br>';
+		}
+	}
+	
+	return html;
+}
+
+function displayResults(json) {
+	var openingDiv = '<div id="results">  ' + getResultsAsHTML(json);
+	var resultsBody = '';
+	var closingDiv = '</div>';
+	$("body").append(openingDiv);
+	$("body").append(closingDiv);
 }
