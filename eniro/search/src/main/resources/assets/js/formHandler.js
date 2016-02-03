@@ -60,9 +60,6 @@ function getResultsAsHTML(json) {
 }
 
 function displayResults(json) {
-	var openingDiv = '<div id="results">  ' + getResultsAsHTML(json);
-	var resultsBody = '';
-	var closingDiv = '</div>';
-	$("body").append(openingDiv);
-	$("body").append(closingDiv);
+	var result = '<div id="results">' + getResultsAsHTML(json) + '</div>';
+	$("body").append(result);
 }
