@@ -58,16 +58,13 @@ public class EniroAPISearch implements Callable<SearchResponse> {
 	public SearchResponse call() throws Exception {
 		JSONObject jsonResults = null;
 		SearchResponse results = null;
-        try {
-    	    jsonResults = getApiResults(phrase);
-    	    if(jsonResults!=null) { 
-    	    	results = new SearchResults(Utils.extractFilteredData(jsonResults, filters));
-    	    } else {
-    	    	results = new SearchError("Problem getting results from API.");
-    	    }
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+	    jsonResults = getApiResults(phrase);
+	    
+	    if(jsonResults!=null) { 
+	    	results = new SearchResults(Utils.extractFilteredData(jsonResults, filters));
+	    } else {
+	    	results = new SearchError("Problem getting results from API.");
+	    }
        return results;
 	}	
 	

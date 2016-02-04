@@ -6,6 +6,8 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.springframework.stereotype.Service;
 
@@ -15,6 +17,7 @@ import eniro.search.api.response.SearchResponse;
 import eniro.search.api.response.impl.SearchError;
 import eniro.search.api.response.impl.SearchResults;
 import eniro.search.app.service.SearchService;
+import javassist.bytecode.stackmap.TypeData.ClassName;
 
 @Service("searchService")
 public class SearchServiceImpl implements SearchService {
@@ -27,6 +30,7 @@ public class SearchServiceImpl implements SearchService {
     	}));
     }
     
+    private static final Logger log = Logger.getLogger( ClassName.class.getName() );
     private static final ExecutorService threadpool = Executors.newCachedThreadPool();
         
 	public SearchResponse searchEniroAPI(SearchCriteria criteria) {
@@ -56,9 +60,9 @@ public class SearchServiceImpl implements SearchService {
 				try {
 					results.add(search.get().getResults());
 				} catch (InterruptedException e) {
-					e.printStackTrace();
+			        log.log( Level.SEVERE, e.getMessage(), e);
 				} catch (ExecutionException e) {
-					e.printStackTrace();
+					log.log( Level.SEVERE, e.getMessage(), e);
 				}
 			}
 			result = results;
