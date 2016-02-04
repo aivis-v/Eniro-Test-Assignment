@@ -18,10 +18,11 @@ import eniro.search.resource.utils.EniroUtil;
 
 public class EniroAPISearch implements Callable<SearchResponse> {
 
-	private final String phrase;
+	private String phrase;
+	private List<String> filters;
 	private static String apiUrl;
 	private static final String USER_AGENT = "Mozilla/5.0";
-	private static List<String> filters;
+	
 	
 	public EniroAPISearch(String phrase, List<String> filters) {
 		this.phrase = phrase;
