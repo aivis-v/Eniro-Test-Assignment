@@ -14,7 +14,7 @@ import org.json.JSONObject;
 
 import eniro.search.api.SearchError;
 import eniro.search.api.SearchResults;
-import eniro.search.resource.utils.EniroUtil;
+import eniro.search.resource.utils.Utils;
 
 public class EniroAPISearch implements Callable<SearchResponse> {
 
@@ -30,7 +30,7 @@ public class EniroAPISearch implements Callable<SearchResponse> {
 	}
 	
 	static {
-		apiUrl = EniroUtil.getPropertyValue("url", "config.properties");
+		apiUrl = Utils.getPropertyValue("url", "config.properties");
 	}
 	
 	private JSONObject getApiResults(String phrase) throws IOException {
@@ -62,7 +62,7 @@ public class EniroAPISearch implements Callable<SearchResponse> {
         try {
     	    jsonResults = getApiResults(phrase);
     	    if(jsonResults!=null) { 
-    	    	results = new SearchResults(EniroUtil.extractFilteredData(jsonResults, filters));
+    	    	results = new SearchResults(Utils.extractFilteredData(jsonResults, filters));
     	    } else {
     	    	results = new SearchError();
     	    }

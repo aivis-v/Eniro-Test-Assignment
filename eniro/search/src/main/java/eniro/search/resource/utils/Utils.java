@@ -9,7 +9,7 @@ import java.util.Properties;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-public class EniroUtil {
+public class Utils {
 
 	public static List<JSONObject> extractFilteredData(JSONObject obj, List<String> filters) {
 		List<JSONObject> results = new ArrayList<JSONObject>();
