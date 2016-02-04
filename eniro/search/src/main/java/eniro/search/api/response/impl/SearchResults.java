@@ -1,4 +1,4 @@
-package eniro.search.api;
+package eniro.search.api.response.impl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,7 +8,7 @@ import org.json.JSONObject;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRawValue;
 
-import eniro.search.SearchResponse;
+import eniro.search.api.response.SearchResponse;
 
 public class SearchResults implements SearchResponse {
 

@@ -2,6 +2,8 @@ package eniro.search.resource.utils;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -56,29 +58,30 @@ public class Utils {
 		return false;
 	}
 	
-	public static String getPropertyValue(String propertyName, String fileName){ 
-		Properties prop = new Properties();
-		InputStream input = null;
+	public static String getPropertyValue(String key, String fileName){ 
+		Properties configProp = new Properties();
 		
-		String value = null;
-		
-		try {
-			ClassLoader loader = Thread.currentThread().getContextClassLoader();
-			input = loader.getResourceAsStream(fileName);
-			prop.load(input);
-			value = prop.getProperty(propertyName);
-		} catch (IOException ex) {
-			ex.printStackTrace();
-		} finally {
-			if (input != null) {
-				try {
-					input.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-		}
-		
-		return value;
+		InputStream in = Thread.currentThread().getContextClassLoader().getResourceAsStream(fileName);
+	    try {
+	        configProp.load(in);
+	        configProp.clone();
+	    } catch (IOException e) {
+	        e.printStackTrace();
+	    }
+	      
+	    return configProp.getProperty(key);
 	}
+
+	public static boolean isUrlResponseOk(String url) {
+	    try {
+			HttpURLConnection con = (HttpURLConnection) new URL(url).openConnection();
+			con.setRequestMethod("HEAD");
+			return (con.getResponseCode() == HttpURLConnection.HTTP_OK);
+	    }
+	    catch (Exception e) {
+	       e.printStackTrace();
+	       return false;
+	    }
+	}
+	
 }

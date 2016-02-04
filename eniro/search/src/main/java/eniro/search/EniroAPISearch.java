@@ -2,18 +2,17 @@ package eniro.search;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
-import java.util.Properties;
 import java.util.concurrent.Callable;
 
 import org.json.JSONObject;
 
-import eniro.search.api.SearchError;
-import eniro.search.api.SearchResults;
+import eniro.search.api.response.SearchResponse;
+import eniro.search.api.response.impl.SearchError;
+import eniro.search.api.response.impl.SearchResults;
 import eniro.search.resource.utils.Utils;
 
 public class EniroAPISearch implements Callable<SearchResponse> {
@@ -64,7 +63,7 @@ public class EniroAPISearch implements Callable<SearchResponse> {
     	    if(jsonResults!=null) { 
     	    	results = new SearchResults(Utils.extractFilteredData(jsonResults, filters));
     	    } else {
-    	    	results = new SearchError();
+    	    	results = new SearchError("Problem getting results from API.");
     	    }
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -73,16 +72,7 @@ public class EniroAPISearch implements Callable<SearchResponse> {
 	}	
 	
 	public static boolean isWorking(){
-	    try {
-	      HttpURLConnection con =
-	         (HttpURLConnection) new URL(apiUrl).openConnection();
-	      con.setRequestMethod("HEAD");
-	      return (con.getResponseCode() == HttpURLConnection.HTTP_OK);
-	    }
-	    catch (Exception e) {
-	       e.printStackTrace();
-	       return false;
-	    }
-	  }  
+		return Utils.isUrlResponseOk(apiUrl);
+	}  
 	
 }

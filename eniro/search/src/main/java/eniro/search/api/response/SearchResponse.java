@@ -1,4 +1,4 @@
-package eniro.search;
+package eniro.search.api.response;
 
 public interface SearchResponse {
 
