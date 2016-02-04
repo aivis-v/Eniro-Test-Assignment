@@ -3,6 +3,7 @@ package eniro.search.resource.utils;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,13 +27,12 @@ public class Utils {
 			
 			if(containsAnyKey(jsonResult, filters) && containsValuableData(filters)) {
 				JSONObject result = new JSONObject();
-				
+
 				for(String filter : filters) {
 					if(jsonResult.has(filter)) {
 						result.accumulate(filter, jsonResult.get(filter));
 					}
 				}
-				
 				results.add(result);
 			}
 		}
@@ -67,6 +67,7 @@ public class Utils {
 	        configProp.clone();
 	    } catch (IOException e) {
 	        e.printStackTrace();
+	        //Log exception
 	    }
 	      
 	    return configProp.getProperty(key);
@@ -78,10 +79,12 @@ public class Utils {
 			con.setRequestMethod("HEAD");
 			return (con.getResponseCode() == HttpURLConnection.HTTP_OK);
 	    }
-	    catch (Exception e) {
-	       e.printStackTrace();
-	       return false;
-	    }
+	    catch (MalformedURLException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	    return false;
 	}
 	
 }

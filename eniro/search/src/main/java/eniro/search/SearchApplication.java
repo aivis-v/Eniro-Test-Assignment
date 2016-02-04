@@ -1,10 +1,6 @@
 package eniro.search;
 
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
-
 import eniro.search.healthchecks.EniroAPIHealthCheck;
-import eniro.search.resource.HistoryResource;
 import eniro.search.resource.SearchResource;
 import io.dropwizard.Application;
 import io.dropwizard.Configuration;
@@ -30,11 +26,8 @@ public class SearchApplication extends Application<Configuration> {
     	
 //		ApplicationContext context = new ClassPathXmlApplicationContext("context.xml");
     	
-    	final SearchResource search= new SearchResource();
+    	final SearchResource search = new SearchResource();
     	environment.jersey().register(search);
-    	
-    	final HistoryResource searchHistory = new HistoryResource();
-    	environment.jersey().register(searchHistory);
     	
         environment.healthChecks().register("Eniro API", new EniroAPIHealthCheck());
     	environment.jersey().setUrlPattern("/api/*");        
