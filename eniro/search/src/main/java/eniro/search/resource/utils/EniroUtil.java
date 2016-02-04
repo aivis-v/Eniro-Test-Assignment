@@ -1,7 +1,10 @@
 package eniro.search.resource.utils;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -51,5 +54,31 @@ public class EniroUtil {
 			}
 		}
 		return false;
+	}
+	
+	public static String getPropertyValue(String propertyName, String fileName){ 
+		Properties prop = new Properties();
+		InputStream input = null;
+		
+		String value = null;
+		
+		try {
+			ClassLoader loader = Thread.currentThread().getContextClassLoader();
+			input = loader.getResourceAsStream(fileName);
+			prop.load(input);
+			value = prop.getProperty(propertyName);
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		} finally {
+			if (input != null) {
+				try {
+					input.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		
+		return value;
 	}
 }

@@ -30,25 +30,7 @@ public class EniroAPISearch implements Callable<SearchResponse> {
 	}
 	
 	static {
-		Properties prop = new Properties();
-		InputStream input = null;
-		
-		try {
-			ClassLoader loader = Thread.currentThread().getContextClassLoader();
-			input = loader.getResourceAsStream("config.properties");
-			prop.load(input);
-			apiUrl = prop.getProperty("url");
-		} catch (IOException ex) {
-			ex.printStackTrace();
-		} finally {
-			if (input != null) {
-				try {
-					input.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-		}
+		apiUrl = EniroUtil.getPropertyValue("url", "config.properties");
 	}
 	
 	private JSONObject getApiResults(String phrase) throws IOException {
