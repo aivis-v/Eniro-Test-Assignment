@@ -42,28 +42,38 @@ public class SearchServiceImpl implements SearchService {
 			searches.add(threadpool.submit(new EniroAPISearch(phrase, criteria.getFilters())));
 		}
 		
+		waitForFuturesToComplete(searches);
+		
+		addAllResultsToList(searches, results);
+
+		result = results;
+
+		return result;
+	}
+	
+	private void waitForFuturesToComplete(List<Future> futures) {
+		//TODO - take care of taking too long  / endless loop ?
 		int searchesDone = 0;
-		while(searchesDone != searches.size()) {
+		while(searchesDone != futures.size()) {
 			searchesDone = 0;
-			for(Future search : searches) {
+			for(Future search : futures) {
 				if(search.isDone()){
 					searchesDone += 1;
 				}
 			}
 		}
-		
-		for(Future<SearchResults> search : searches) {
+	}
+	
+	private void addAllResultsToList(List<Future> futures, SearchResults list) {
+		for(Future<SearchResults> search : futures) {
 			try {
-				results.add(search.get().getResults());
+				list.add(search.get().getResults());
 			} catch (InterruptedException e) {
 		        log.log( Level.SEVERE, e.getMessage(), e);
 			} catch (ExecutionException e) {
 				log.log( Level.SEVERE, e.getMessage(), e);
 			}
 		}
-		result = results;
-
-		return result;
 	}
 
 }
