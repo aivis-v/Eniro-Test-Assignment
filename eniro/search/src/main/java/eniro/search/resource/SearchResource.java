@@ -18,7 +18,7 @@ import eniro.search.app.service.SearchService;
 public class SearchResource {
 
 	@Autowired
-	private SearchService searchService;// = new SearchServiceImpl();
+	private SearchService searchService;
 	
     @POST
 	public SearchResponse searchPhrases(SearchCriteria criteria) {
