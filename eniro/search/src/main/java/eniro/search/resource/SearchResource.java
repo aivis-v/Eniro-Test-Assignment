@@ -22,7 +22,7 @@ public class SearchResource {
 	
     @POST
 	public SearchResponse searchPhrases(SearchCriteria criteria) {
-		return searchService.searchEniroAPI(criteria);
+		return searchService.search(criteria);
 	}
  
 }

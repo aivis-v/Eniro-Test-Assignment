@@ -5,6 +5,6 @@ import eniro.search.api.response.SearchResponse;
 
 public interface SearchService {
 
-	public SearchResponse searchEniroAPI(SearchCriteria criteria);
+	public SearchResponse search(SearchCriteria criteria);
 	
 }

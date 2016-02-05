@@ -31,7 +31,7 @@ public class SearchApplication extends Application<Configuration> {
     	SearchResource search = applicationContext.getBean(SearchResource.class);
     	environment.jersey().register(search);
     	
-        environment.healthChecks().register("Eniro API", new EniroAPIHealthCheck());
+//        environment.healthChecks().register("Eniro API", new EniroAPIHealthCheck());
     	environment.jersey().setUrlPattern("/api/*");        
     }
 

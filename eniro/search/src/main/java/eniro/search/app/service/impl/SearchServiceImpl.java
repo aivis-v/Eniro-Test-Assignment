@@ -32,7 +32,7 @@ public class SearchServiceImpl implements SearchService {
     private static final Logger log = Logger.getLogger( ClassName.class.getName() );
     private static final ExecutorService threadpool = Executors.newCachedThreadPool();
         
-	public SearchResponse searchEniroAPI(SearchCriteria criteria) {
+	public SearchResponse search(SearchCriteria criteria) {
 		SearchResponse result = null;
 
 		SearchResults results = new SearchResults();
