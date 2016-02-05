@@ -22,14 +22,13 @@ public class EniroAPISearch implements Callable<SearchResponse> {
 	private static String apiUrl;
 	private static final String USER_AGENT = "Mozilla/5.0";
 	
+	static {
+		apiUrl = Utils.getPropertyValue("url", "config.properties");
+	}
 	
 	public EniroAPISearch(String phrase, List<String> filters) {
 		this.phrase = phrase;
 		this.filters = filters;
-	}
-	
-	static {
-		apiUrl = Utils.getPropertyValue("url", "config.properties");
 	}
 	
 	private JSONObject getApiResults(String phrase) throws IOException {
@@ -59,6 +58,11 @@ public class EniroAPISearch implements Callable<SearchResponse> {
 	public SearchResponse call() throws Exception {
 		JSONObject jsonResults = null;
 		SearchResponse results = null;
+		
+		if(!Utils.isUrlResponseOk(apiUrl)) { 
+			return new SearchError("Problem accessing Search API.");
+		}
+		
 	    jsonResults = getApiResults(phrase);
 	    
 	    if(jsonResults != null) { 
@@ -68,9 +72,5 @@ public class EniroAPISearch implements Callable<SearchResponse> {
 	    }
        return results;
 	}	
-	
-	public static boolean isWorking(){
-		return Utils.isUrlResponseOk(apiUrl);
-	}  
 	
 }

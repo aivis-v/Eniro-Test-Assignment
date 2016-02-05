@@ -9,15 +9,16 @@ import java.util.concurrent.Future;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.springframework.stereotype.Component;
+
 import eniro.search.EniroAPISearch;
 import eniro.search.api.SearchCriteria;
 import eniro.search.api.response.SearchResponse;
-import eniro.search.api.response.impl.SearchError;
 import eniro.search.api.response.impl.SearchResults;
 import eniro.search.app.service.SearchService;
 import javassist.bytecode.stackmap.TypeData.ClassName;
 
-//@Service("searchService")
+@Component
 public class SearchServiceImpl implements SearchService {
 
     public SearchServiceImpl() { 
@@ -33,10 +34,6 @@ public class SearchServiceImpl implements SearchService {
         
 	public SearchResponse searchEniroAPI(SearchCriteria criteria) {
 		SearchResponse result = null;
-
-		if(!EniroAPISearch.isWorking()) { 
-			return new SearchError("Problem accessing Search API.");
-		} 
 
 		SearchResults results = new SearchResults();
 		List<Future> searches = new ArrayList<Future>();
