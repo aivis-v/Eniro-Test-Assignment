@@ -60,7 +60,7 @@ public class EniroAPISearch implements Callable<SearchResponse> {
 		SearchResponse results = null;
 		
 		if(!Utils.isUrlResponseOk(apiUrl)) { 
-			return new SearchError("Problem accessing Search API.");
+			return new SearchError("Problem accessing Search API");
 		}
 		
 	    jsonResults = getApiResults(phrase);
@@ -68,7 +68,7 @@ public class EniroAPISearch implements Callable<SearchResponse> {
 	    if(jsonResults != null) { 
 	    	results = new SearchResults(Utils.extractFilteredData(jsonResults, filters));
 	    } else {
-	    	results = new SearchError("Problem getting results from API.");
+	    	results = new SearchError("Problem getting results from API");
 	    }
        return results;
 	}	
