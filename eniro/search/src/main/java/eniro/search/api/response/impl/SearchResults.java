@@ -36,4 +36,8 @@ public class SearchResults implements SearchResponse {
 		this.results.addAll(results);
 	}
 	
+	public void add(JSONObject obj) {
+		this.results.add(obj);
+	}
+	
 }

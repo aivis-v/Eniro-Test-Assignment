@@ -14,19 +14,25 @@ import org.springframework.stereotype.Component;
 import eniro.search.EniroAPISearch;
 import eniro.search.api.SearchCriteria;
 import eniro.search.api.response.SearchResponse;
+import eniro.search.api.response.impl.SearchError;
 import eniro.search.api.response.impl.SearchResults;
 import eniro.search.app.service.SearchService;
+import eniro.search.resource.utils.Utils;
 import javassist.bytecode.stackmap.TypeData.ClassName;
 
 @Component
 public class SearchServiceImpl implements SearchService {
 
+	private int timeout;
+	
     public SearchServiceImpl() { 
     	Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
     	    public void run() {
     	    	threadpool.shutdown();
     	    }
     	}));
+    	
+    	timeout = Integer.parseInt(Utils.getPropertyValue("timeout", "config.properties"));
     }
     
     private static final Logger log = Logger.getLogger( ClassName.class.getName() );
@@ -42,38 +48,54 @@ public class SearchServiceImpl implements SearchService {
 			searches.add(threadpool.submit(new EniroAPISearch(phrase, criteria.getFilters())));
 		}
 		
-		waitForFuturesToComplete(searches);
+		boolean allFuturesDone = areAllFuturesDone(searches);
 		
-		addAllResultsToList(searches, results);
-
-		result = results;
-
+		if(allFuturesDone) {
+			result = getAllResultsAsList(searches, results);
+		} else {
+			result = new SearchError("Problem with search results.");
+		}
+		
 		return result;
 	}
 	
-	private void waitForFuturesToComplete(List<Future> futures) {
-		//TODO - take care of taking too long  / endless loop ?
+	private boolean areAllFuturesDone(List<Future> futures) {
+		long start = System.currentTimeMillis();
 		int searchesDone = 0;
-		while(searchesDone != futures.size()) {
+		
+		while(searchesDone != futures.size() && System.currentTimeMillis() < start + timeout * 1000) {
 			searchesDone = 0;
+			
 			for(Future search : futures) {
 				if(search.isDone()){
 					searchesDone += 1;
 				}
+				
+				if(search.isCancelled()) {
+					return false;
+				}
 			}
 		}
+		
+		return searchesDone == futures.size();
 	}
 	
-	private void addAllResultsToList(List<Future> futures, SearchResults list) {
+	private SearchResponse getAllResultsAsList(List<Future> futures, SearchResults list) {
+		SearchResults results = new SearchResults();
+		
 		for(Future<SearchResults> search : futures) {
 			try {
-				list.add(search.get().getResults());
+				results.add(search.get().getResults());
 			} catch (InterruptedException e) {
 		        log.log( Level.SEVERE, e.getMessage(), e);
+		        return new SearchError("Search was interrupted.");
+		        
 			} catch (ExecutionException e) {
 				log.log( Level.SEVERE, e.getMessage(), e);
+				return new SearchError("Problem with search execution.");
 			}
 		}
+		return results;
 	}
 
 }
