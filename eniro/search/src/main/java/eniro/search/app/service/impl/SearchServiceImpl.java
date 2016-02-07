@@ -80,7 +80,7 @@ public class SearchServiceImpl implements SearchService {
 		return searchesDone == futures.size();
 	}
 	
-	private SearchResponse getAllResultsAsList(List<Future> futures, SearchResults list) {
+	private SearchResponse getAllResultsAsList(final List<Future> futures, final SearchResults list) {
 		SearchResults results = new SearchResults();
 		
 		for(Future<SearchResults> search : futures) {
